@@ -1,0 +1,32 @@
+{
+  "name": "broadcast-app",
+  "version": "1.0.0",
+  "description": "Api that has an integration with apache kafka and socketIO to send messages to multiples clients.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "Apache",
+    "Kafka",
+    "Javascript",
+    "Broadcast"
+  ],
+  "author": "Jhon Mario Murillo Cordoba <jhonmurillo2014@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chalk": "^4.1.0",
+    "cors": "^2.8.5",
+    "debug": "^2.6.9",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "kafkajs": "^1.15.0",
+    "socket.io": "^4.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
