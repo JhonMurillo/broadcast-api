@@ -16,10 +16,11 @@
 {
     "messages": [
         {
-            "value": "Hello World"
+            "message": "simply dummy text"
         }
-        
     ]
 }
 ```
  3. open the file [test.html](https://github.com/JhonMurillo/broadcast-api/blob/main/test.html)
+
+ 4. open message on html http://localhost:3001/notification/:ID [GET]

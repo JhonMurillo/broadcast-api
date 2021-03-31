@@ -11,15 +11,9 @@ const runConsumer = async () => {
 
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
-            console.log({
-                value: message.value.toString(),
-            })
-
             try {
                 const { socketServer, socketIO } = get();
-                const data = { iam: uuidv4(), message: message.value.toString(), date: new Date() };
-                // socketServer.emit('welcome_event', data);
-                socketIO.sockets.emit('broadcast', data);
+                socketIO.sockets.emit('broadcast', message.value.toString());
             } catch (error) {
                 console.log(error)
                 process.exit(1)
