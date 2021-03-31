@@ -14,6 +14,7 @@ const { connect } = require('../src/kafka/index')
 const { send } = require('../src/kafka/producer')
 const { runConsumer } = require('../src/kafka/consumer')
 const { start } = require('../src/socket/index')
+const { insert, getByID, init } = require('../src/repositories/index')
 
 const port = process.env.PORT || 3000
 
@@ -22,15 +23,38 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
+// set the view engine to ejs
+app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
     res.send('Broadcast App working properly')
 })
 
+
+app.get('/notification/:ID', (req, res) => {
+    const { ID } = req.params;
+    const { message, title } = getByID(ID);
+
+    res.render('pages/index', { message, title });
+});
+
 app.post('/send', async (req, res) => {
     try {
-        const { messages } = req.body;
-        const response = await send({ messages });
+        const { messages = [] } = req.body;
+
+        const finalMessages = messages.map(item => {
+            const data = {
+                ID: uuidv4(),
+                message: item.message || 'Default Message',
+                title: item.title || 'Broadcast App Notification',
+                type: item.type || 'INFORMATION',
+                date: new Date()
+            }
+            insert(data)
+            return { value: JSON.stringify(data) }
+        })
+
+        const response = await send({ messages: finalMessages });
         res.status(200).json({
             ID: uuidv4(),
             message: 'message sent!!',
@@ -65,6 +89,7 @@ process.on('unhandleRejection', handleFatalError)
 
 const server = app.listen(port, async () => {
     start(server);
+    init()
     await connect();
     await runConsumer();
     console.log(`${chalk.green('[broadcast-app]')} ${chalk.yellowBright(`server listening on port ${port}`)}`)
